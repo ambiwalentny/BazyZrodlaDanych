@@ -1,0 +1,54 @@
+select table_name from user_tables;
+select * from countries;
+--DROP TABLE countries; --
+--DROP TABLE departments;
+--DROP TABLE employees; --
+--DROP TABLE jobs; --
+--DROP TABLE job_history; --
+--DROP TABLE locations; -- 
+--DROP TABLE regions; --
+
+SELECT table_name
+FROM all_tables
+WHERE owner = 'HR';
+
+CREATE TABLE countries AS
+SELECT *
+FROM HR.countries;
+
+CREATE TABLE regions AS
+SELECT *
+FROM HR.regions;
+
+CREATE TABLE locations AS
+SELECT *
+FROM HR.locations
+
+
+CREATE TABLE job_history  AS
+SELECT *
+FROM HR.job_history
+
+CREATE TABLE jobs AS
+SELECT *
+FROM HR.jobs
+
+CREATE TABLE employees AS
+SELECT *
+FROM HR.employees
+
+CREATE TABLE departments  AS
+SELECT *
+FROM HR.departments
+
+CREATE TABLE job_grades  AS
+SELECT *
+FROM HR.job_grades
+
+--zadanie 1
+CREATE VIEW wynagrodzenia AS
+SELECT last_name, salary
+FROM employees
+WHERE department_id IN (20, 50)
+AND salary BETWEEN 2000 AND 7000
+ORDER BY last_name;
