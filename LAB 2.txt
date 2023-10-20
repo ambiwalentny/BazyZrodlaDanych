@@ -45,6 +45,27 @@ CREATE TABLE job_grades  AS
 SELECT *
 FROM HR.job_grades
 
+ALTER TABLE regions ADD PRIMARY KEY (REGION_ID);
+ALTER TABLE countries ADD PRIMARY KEY (COUNTRY_ID);
+ALTER TABLE countries ADD FOREIGN KEY (REGION_ID) REFERENCES regions(REGION_ID);
+ALTER TABLE locations ADD PRIMARY KEY (LOCATION_ID);
+ALTER TABLE locations ADD FOREIGN KEY (COUNTRY_ID) REFERENCES countries(COUNTRY_ID);
+ALTER TABLE departments ADD PRIMARY KEY (DEPARTMENT_ID);
+ALTER TABLE departments ADD FOREIGN KEY (LOCATION_ID) REFERENCES locations(LOCATION_ID);
+ALTER TABLE employees ADD PRIMARY KEY (EMPLOYEE_ID);
+ALTER TABLE employees ADD FOREIGN KEY (MANAGER_ID) REFERENCES employees(EMPLOYEE_ID);
+ALTER TABLE departments ADD FOREIGN KEY (MANAGER_ID) REFERENCES employees(EMPLOYEE_ID);
+ALTER TABLE employees ADD FOREIGN KEY (DEPARTMENT_ID) REFERENCES departments(DEPARTMENT_ID);
+ALTER TABLE jobs ADD PRIMARY KEY (JOB_ID);
+ALTER TABLE employees ADD FOREIGN KEY (JOB_ID) REFERENCES jobs(JOB_ID);
+ALTER TABLE job_history ADD FOREIGN KEY (EMPLOYEE_ID) REFERENCES employees(EMPLOYEE_ID);
+ALTER TABLE job_history ADD FOREIGN KEY (DEPARTMENT_ID) REFERENCES departments(DEPARTMENT_ID);
+ALTER TABLE job_history ADD FOREIGN KEY (JOB_ID) REFERENCES jobs(JOB_ID);
+
+
+
+
+
 --zadanie 1
 CREATE VIEW wynagrodzenia AS
 SELECT last_name, salary
@@ -52,3 +73,46 @@ FROM employees
 WHERE department_id IN (20, 50)
 AND salary BETWEEN 2000 AND 7000
 ORDER BY last_name;
+
+SELECT * FROM wynagrodzenia;
+--zadanie 2
+
+SELECT
+    hire_date,
+    last_name,
+    :kolumna
+FROM
+    employees
+WHERE
+    employee_id IN (
+        SELECT
+            employee_id
+        FROM
+            employees
+        WHERE
+            hire_date BETWEEN '2005-01-01' AND '2005-12-31'
+    )
+ORDER BY
+    :kolumna;
+ 
+ 
+--zadanie 3
+SELECT
+    first_name || ' ' || last_name AS imię_nazwisko,
+    salary,
+    phone_number
+FROM
+    employees
+WHERE
+    last_name LIKE '%e%'
+    AND 
+    first_name LIKE :imie
+ORDER BY
+    imię_nazwisko DESC,
+    salary ASC;
+
+SELECT * FROM employees 
+--zadanie 4
+
+    
+   
