@@ -1,0 +1,81 @@
+------------------------------------------------
+------------------- LAB 3 ----------------------
+------------------------------------------------
+-- ZADANIE 1 --
+DECLARE
+  numer_max NUMBER;
+  v_nowy_nr_departamentu NUMBER;
+  v_nowy_typ_pola departments.department_name%TYPE := 'EDUCATION';
+BEGIN
+  -- Znajdź maksymalny numer departamentu
+  SELECT MAX(department_id) INTO numer_max FROM departments;
+  
+  -- Dodaj nowy departament
+  v_nowy_nr_departamentu := numer_max + 10;
+  INSERT INTO departments (department_id, department_name, manager_id, location_id)
+  VALUES (v_nowy_nr_departamentu, v_nowy_typ_pola, NULL, NULL);
+  
+  COMMIT;
+END;
+/
+-- zadanie 2 -- 
+DECLARE
+  numer_max NUMBER;
+  v_nowy_nr_departamentu NUMBER;
+  v_nowy_typ_pola departments.department_name%TYPE := 'EDUCATION';
+BEGIN
+  SELECT MAX(department_id) INTO numer_max FROM departments;
+  
+  v_nowy_nr_departamentu := numer_max + 10;
+  INSERT INTO departments (department_id, department_name, manager_id, location_id)
+  VALUES (v_nowy_nr_departamentu, v_nowy_typ_pola, NULL, 3000); -- Zmiana location_id
+  
+  COMMIT;
+END;
+/
+
+
+-- zadanie 3 --
+CREATE TABLE nowa (wartosc VARCHAR2(10));
+
+DECLARE
+  v_liczba NUMBER;
+BEGIN
+  FOR v_liczba IN 1..10 LOOP
+    IF v_liczba NOT IN (4, 6) THEN
+      INSERT INTO nowa (wartosc) VALUES (TO_CHAR(v_liczba));
+    END IF;
+  END LOOP;
+  
+  COMMIT;
+END;
+/
+
+SELECT * FROM nowa
+
+-- zadanie 4 -- 
+DECLARE
+  v_country countries%ROWTYPE;
+BEGIN
+  SELECT * INTO v_country FROM countries WHERE country_id = 'CA';
+  DBMS_OUTPUT.PUT_LINE('Nazwa kraju: ' || v_country.country_name);
+  DBMS_OUTPUT.PUT_LINE('Region ID: ' || v_country.region_id);
+END;
+/
+
+-- zadanie 5
+DECLARE
+  TYPE department_names_type IS TABLE OF departments.department_name%TYPE
+    INDEX BY BINARY_INTEGER;
+  
+  v_departments department_names_type;
+BEGIN
+  FOR i IN 1..10 LOOP
+    v_departments(i) := (SELECT department_name FROM departments WHERE department_id = i * 10);
+  END LOOP;
+  
+  FOR i IN 1..10 LOOP
+    DBMS_OUTPUT.PUT_LINE('Departament ' || i * 10 || ': ' || v_departments(i));
+  END LOOP;
+END;
+/
