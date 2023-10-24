@@ -113,7 +113,50 @@ ORDER BY
 
 SELECT * FROM employees 
 --zadanie 4
+SELECT first_name, last_name, EXTRACT(YEAR FROM hire_date) AS rok_zatrudnienia,
+  CASE
+    WHEN EXTRACT(YEAR FROM hire_date) <= 150 THEN salary * 0.10
+    WHEN EXTRACT(YEAR FROM hire_date) <= 200 THEN salary * 0.20
+    ELSE salary * 0.30
+  END AS wysokosc_dodatku
+FROM employees
+ORDER BY rok_zatrudnienia;
+--zadanie 5
+SELECT department_id, SUM(salary) AS suma_zarobkow, ROUND(AVG(salary)) AS srednia_zarobkow
+FROM employees
+GROUP BY department_id
+HAVING MIN(salary) > 5000;
 
 
-    
-   
+--zadanie 6
+SELECT * FROM employees
+
+
+-- zadanie 7
+SELECT e1.first_name, e1.last_name, e2.first_name, e2.last_name
+FROM employees e1
+JOIN employees e2 ON e1.manager_id = e2.employee_id
+WHERE e1.first_name = 'Jennifer';
+-- zadanie 8
+SELECT department_name
+FROM departments
+WHERE department_id NOT IN (SELECT DISTINCT department_id FROM employees);
+-- zadanie 9
+-- DROP TABLE job_grades
+CREATE TABLE job_grades AS
+SELECT * FROM hr.job_grades;
+--zadanie 10
+SELECT e.first_name, e.last_name, e.job_id, d.department_name, e.salary, jg.grade
+FROM employees e
+JOIN departments d ON e.department_id = d.department_id
+JOIN job_grades jg ON e.job_id = jg.job_id;
+--zadanie 11
+SELECT first_name, last_name, salary
+FROM employees
+WHERE salary > (SELECT AVG(salary) FROM employees)
+ORDER BY salary DESC;
+--zadanie 12
+SELECT e1.employee_id, e1.first_name, e1.last_name
+FROM employees e1
+WHERE e1.department_id IN (SELECT department_id FROM employees WHERE last_name LIKE '%u%');
+
